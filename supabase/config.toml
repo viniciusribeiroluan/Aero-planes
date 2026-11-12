@@ -1,0 +1,2 @@
+[functions.search-flights]
+verify_jwt = true

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pesquise voos, consulte ofertas e salve suas simulações no Aero-Planes.">
+    <title>Voos e passagens | Aero-Planes</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --navy: #10233f;
+            --blue: #1769e0;
+            --blue-dark: #1056bd;
+            --sky: #eaf3ff;
+            --ink: #17243a;
+            --muted: #64748b;
+            --line: #dce5f0;
+            --white: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: #f7f9fc;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 18px 28px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--navy);
+            font-size: 1.12rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border-radius: 12px;
+            color: var(--white);
+            background: var(--blue);
+            font-size: 1.2rem;
+        }
+
+        .account-tools {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .account-tools button {
+            padding: 9px 13px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            color: var(--navy);
+            background: var(--white);
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .hero {
+            padding: 54px 28px 62px;
+            color: var(--white);
+            background: linear-gradient(118deg, #10233f 5%, #123d72 60%, #1769e0 115%);
+        }
+
+        .hero-inner,
+        .content {
+            max-width: 1104px;
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            margin: 0 0 12px;
+            color: #c9e0ff;
+            font-size: 0.82rem;
+            font-weight: 750;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            letter-spacing: -0.06em;
+        }
+
+        .hero-copy {
+            max-width: 580px;
+            margin: 12px 0 26px;
+            color: #d5e5fb;
+            line-height: 1.65;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+            align-items: end;
+            gap: 13px;
+            padding: 19px;
+            border-radius: 15px;
+            color: var(--ink);
+            background: var(--white);
+            box-shadow: 0 16px 40px rgba(4, 20, 44, 0.22);
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #526179;
+            font-size: 0.78rem;
+            font-weight: 750;
+        }
+
+        .field input {
+            width: 100%;
+            min-width: 0;
+            height: 45px;
+            padding: 0 11px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            outline: none;
+            color: var(--ink);
+            background: #fbfcfe;
+        }
+
+        .field input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.14);
+        }
+
+        .primary-button {
+            min-height: 45px;
+            padding: 0 18px;
+            border: 0;
+            border-radius: 8px;
+            color: var(--white);
+            background: var(--blue);
+            cursor: pointer;
+            font-weight: 750;
+        }
+
+        .primary-button:hover:not(:disabled) {
+            background: var(--blue-dark);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .content {
+            padding: 42px 28px 76px;
+        }
+
+        .notice {
+            margin: 0 0 24px;
+            padding: 13px 15px;
+            border: 1px solid #cfe0f8;
+            border-radius: 10px;
+            color: #365171;
+            background: #eef5ff;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .notice[hidden],
+        .status[hidden] {
+            display: none;
+        }
+
+        .status {
+            margin: 18px 0 0;
+            color: #9a3412;
+            line-height: 1.5;
+        }
+
+        .results-heading {
+            margin: 32px 0 16px;
+            color: var(--navy);
+            font-size: 1.45rem;
+            letter-spacing: -0.035em;
+        }
+
+        .results,
+        .history-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .flight-card,
+        .history-card {
+            padding: 20px;
+            border: 1px solid #e6ebf2;
+            border-radius: 13px;
+            background: var(--white);
+            box-shadow: 0 4px 14px rgba(16, 35, 63, 0.035);
+        }
+
+        .flight-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .route {
+            margin: 0;
+            color: var(--navy);
+            font-size: 1.12rem;
+            font-weight: 800;
+        }
+
+        .flight-details,
+        .history-details {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .price {
+            margin: 0 0 9px;
+            color: var(--navy);
+            font-size: 1.35rem;
+            font-weight: 850;
+            text-align: right;
+        }
+
+        .booking-button {
+            min-height: 39px;
+            padding: 0 13px;
+            border: 0;
+            border-radius: 8px;
+            color: var(--white);
+            background: var(--blue);
+            cursor: pointer;
+            font-weight: 750;
+        }
+
+        .booking-button:hover {
+            background: var(--blue-dark);
+        }
+
+        .history-section {
+            margin-top: 52px;
+            padding-top: 28px;
+            border-top: 1px solid var(--line);
+        }
+
+        .history-section h2 {
+            margin: 0 0 16px;
+            color: var(--navy);
+            font-size: 1.4rem;
+            letter-spacing: -0.035em;
+        }
+
+        .history-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .history-card p {
+            margin: 0;
+            color: var(--navy);
+            font-weight: 750;
+        }
+
+        .history-price {
+            color: var(--navy);
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .empty-history {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        dialog {
+            width: min(440px, calc(100% - 32px));
+            padding: 0;
+            border: 0;
+            border-radius: 16px;
+            color: var(--ink);
+            box-shadow: 0 24px 70px rgba(4, 20, 44, 0.3);
+        }
+
+        dialog::backdrop {
+            background: rgba(8, 24, 45, 0.58);
+        }
+
+        .dialog-content {
+            padding: 25px;
+        }
+
+        .dialog-content h2 {
+            margin: 0 0 8px;
+            color: var(--navy);
+            font-size: 1.4rem;
+        }
+
+        .dialog-content > p {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            padding: 13px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .payment-option input {
+            accent-color: var(--blue);
+        }
+
+        .dialog-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .secondary-button {
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--navy);
+            background: var(--white);
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        footer {
+            padding: 22px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            background: var(--white);
+            font-size: 0.86rem;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+            .search-form {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .search-form .primary-button {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .topbar {
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            .account-tools {
+                align-items: flex-end;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 0.78rem;
+            }
+
+            .hero {
+                padding: 43px 20px 48px;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+
+            .search-form .primary-button {
+                grid-column: auto;
+            }
+
+            .content {
+                padding: 30px 20px 58px;
+            }
+
+            .flight-card {
+                grid-template-columns: 1fr;
+            }
+
+            .price {
+                text-align: left;
+            }
+
+            .history-card {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="pagina-inicial.html">
+            <span class="brand-mark" aria-hidden="true">✈</span>
+            <span>Aero-Planes</span>
+        </a>
+        <div class="account-tools">
+            <span id="account-email">Conectando...</span>
+            <button id="sign-out" type="button" disabled>Sair</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-inner">
+                <p class="eyebrow">Ofertas de voos</p>
+                <h1>Encontre sua próxima passagem</h1>
+                <p class="hero-copy">Pesquise opções e tarifas em tempo real pelo fornecedor de voos. As compras nesta página são apenas simulações escolares.</p>
+                <form class="search-form" id="search-form">
+                    <div class="field">
+                        <label for="origin">Origem (código IATA)</label>
+                        <input id="origin" name="origin" type="text" placeholder="Ex.: GRU" minlength="3" maxlength="3" pattern="[A-Za-z]{3}" autocomplete="off" required>
+                    </div>
+                    <div class="field">
+                        <label for="destination">Destino (código IATA)</label>
+                        <input id="destination" name="destination" type="text" placeholder="Ex.: LIS" minlength="3" maxlength="3" pattern="[A-Za-z]{3}" autocomplete="off" required>
+                    </div>
+                    <div class="field">
+                        <label for="departure-date">Data de ida</label>
+                        <input id="departure-date" name="departure-date" type="date" required>
+                    </div>
+                    <div class="field">
+                        <label for="passengers">Passageiros</label>
+                        <input id="passengers" name="passengers" type="number" min="1" max="9" value="1" required>
+                    </div>
+                    <button class="primary-button" id="search-button" type="submit">Buscar passagens</button>
+                </form>
+                <p class="status" id="search-status" role="status" aria-live="polite" hidden></p>
+            </div>
+        </section>
+
+        <section class="content">
+            <p class="notice" id="setup-notice" hidden>Para ativar esta página, configure o Supabase, aplique a migração do banco e publique a função de busca de voos. Consulte <code>CONFIGURACAO.md</code>.</p>
+            <p class="notice">Os preços são ofertas consultadas no momento da busca e podem mudar. “Simular compra” não cobra, não reserva assento e não emite passagem.</p>
+            <h2 class="results-heading" id="results-heading" hidden>Voos encontrados</h2>
+            <div class="results" id="results" aria-live="polite"></div>
+
+            <section class="history-section" aria-labelledby="history-heading">
+                <h2 id="history-heading">Minhas simulações</h2>
+                <div class="history-list" id="history-list">
+                    <p class="empty-history">Suas simulações aparecerão aqui após entrar na conta.</p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <dialog id="checkout-dialog">
+        <form class="dialog-content" id="checkout-form">
+            <h2>Simular pagamento</h2>
+            <p id="checkout-summary"></p>
+            <p>Escolha uma opção fictícia para registrar esta simulação na sua conta. Nenhum dado de cartão será solicitado ou cobrado.</p>
+            <label class="payment-option">
+                <input type="radio" name="payment-method" value="pix-demo" checked>
+                <span>PIX (simulação)</span>
+            </label>
+            <label class="payment-option">
+                <input type="radio" name="payment-method" value="cartao-demo">
+                <span>Cartão (simulação)</span>
+            </label>
+            <p class="status" id="checkout-status" role="status" aria-live="polite" hidden></p>
+            <div class="dialog-actions">
+                <button class="secondary-button" id="cancel-checkout" type="button">Cancelar</button>
+                <button class="primary-button" id="confirm-checkout" type="submit">Confirmar simulação</button>
+            </div>
+        </form>
+    </dialog>
+
+    <footer>Aero-Planes · Projeto escolar · Pagamentos e reservas não são reais</footer>
+
+    <script type="module">
+        import { isSupabaseConfigured, supabase } from "./supabase-client.js";
+
+        const searchForm = document.querySelector("#search-form");
+        const searchButton = document.querySelector("#search-button");
+        const searchStatus = document.querySelector("#search-status");
+        const resultsElement = document.querySelector("#results");
+        const resultsHeading = document.querySelector("#results-heading");
+        const historyList = document.querySelector("#history-list");
+        const dialog = document.querySelector("#checkout-dialog");
+        const checkoutForm = document.querySelector("#checkout-form");
+        const checkoutStatus = document.querySelector("#checkout-status");
+        const confirmCheckout = document.querySelector("#confirm-checkout");
+        const today = new Date();
+        const dateInput = document.querySelector("#departure-date");
+        dateInput.min = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+        ].join("-");
+
+        let currentUser = null;
+        let selectedOffer = null;
+
+        function setStatus(element, message, isError = true) {
+            element.textContent = message;
+            element.style.color = isError ? "#9a3412" : "#166534";
+            element.hidden = false;
+        }
+
+        function formatPrice(amount, currency) {
+            return new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency,
+            }).format(Number(amount));
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "Data não informada";
+            }
+            return new Intl.DateTimeFormat("pt-BR", {
+                dateStyle: "medium",
+                timeStyle: "short",
+            }).format(new Date(value));
+        }
+
+        function appendText(parent, tag, className, text) {
+            const element = document.createElement(tag);
+            element.className = className;
+            element.textContent = text;
+            parent.append(element);
+            return element;
+        }
+
+        function renderOffers(offers) {
+            resultsElement.replaceChildren();
+            resultsHeading.hidden = false;
+
+            if (!offers.length) {
+                appendText(resultsElement, "p", "empty-history", "Nenhuma oferta foi encontrada para essa busca. Experimente outros aeroportos ou datas.");
+                return;
+            }
+
+            for (const offer of offers) {
+                if (!offer.id || !/^[A-Z]{3}$/.test(offer.total_currency ?? "") || !Number.isFinite(Number(offer.total_amount))) {
+                    continue;
+                }
+
+                const card = document.createElement("article");
+                card.className = "flight-card";
+                const details = document.createElement("div");
+                const slices = Array.isArray(offer.slices) ? offer.slices : [];
+                const route = slices.map((slice) => {
+                    const start = slice.origin?.iata_code ?? "Origem";
+                    const end = slice.destination?.iata_code ?? "Destino";
+                    return `${start} → ${end}`;
+                }).join(" · ") || "Detalhes da rota indisponíveis";
+                appendText(details, "p", "route", route);
+                const segments = slices.flatMap((slice) => slice.segments ?? []);
+                const departure = segments[0]?.departing_at;
+                const carrier = offer.owner?.name ?? segments[0]?.marketing_carrier?.name ?? "Companhia aérea";
+                appendText(details, "p", "flight-details", `${carrier} · Saída: ${formatDate(departure)}`);
+                card.append(details);
+
+                const purchase = document.createElement("div");
+                appendText(purchase, "p", "price", formatPrice(offer.total_amount, offer.total_currency));
+                const button = document.createElement("button");
+                button.className = "booking-button";
+                button.type = "button";
+                button.textContent = "Simular compra";
+                button.addEventListener("click", () => openCheckout(offer));
+                purchase.append(button);
+                card.append(purchase);
+                resultsElement.append(card);
+            }
+
+            if (!resultsElement.childElementCount) {
+                appendText(resultsElement, "p", "empty-history", "O fornecedor retornou ofertas em formato inesperado. Tente novamente.");
+            }
+        }
+
+        function openCheckout(offer) {
+            selectedOffer = offer;
+            document.querySelector("#checkout-summary").textContent =
+                `Valor consultado: ${formatPrice(offer.total_amount, offer.total_currency)}. Esta ação apenas salva uma simulação.`;
+            checkoutStatus.hidden = true;
+            confirmCheckout.disabled = false;
+            dialog.showModal();
+        }
+
+        async function loadHistory() {
+            const { data, error } = await supabase
+                .from("reservas_demo")
+                .select("id, origin_code, destination_code, departure_date, price, currency, payment_method, created_at")
+                .order("created_at", { ascending: false })
+                .limit(10);
+
+            if (error) {
+                historyList.replaceChildren();
+                appendText(historyList, "p", "empty-history", `Não foi possível carregar suas simulações: ${error.message}`);
+                return;
+            }
+
+            historyList.replaceChildren();
+            if (!data.length) {
+                appendText(historyList, "p", "empty-history", "Você ainda não salvou simulações de compra.");
+                return;
+            }
+
+            for (const booking of data) {
+                const card = document.createElement("article");
+                card.className = "history-card";
+                const details = document.createElement("div");
+                appendText(details, "p", "", `${booking.origin_code} → ${booking.destination_code}`);
+                appendText(details, "span", "history-details", `${booking.departure_date} · ${booking.payment_method === "pix-demo" ? "PIX demonstrativo" : "Cartão demonstrativo"}`);
+                card.append(details);
+                appendText(card, "span", "history-price", formatPrice(booking.price, booking.currency));
+                historyList.append(card);
+            }
+        }
+
+        if (!isSupabaseConfigured) {
+            document.querySelector("#setup-notice").hidden = false;
+            searchButton.disabled = true;
+            document.querySelector("#sign-out").disabled = true;
+            setStatus(searchStatus, "A integração com o Supabase ainda não está configurada.");
+        } else {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (error) {
+                setStatus(searchStatus, `Não foi possível verificar a sessão: ${error.message}`);
+            } else if (!session) {
+                window.location.replace("login.html");
+            } else {
+                currentUser = session.user;
+                document.querySelector("#account-email").textContent = currentUser.email ?? "Conta conectada";
+                document.querySelector("#sign-out").disabled = false;
+                await loadHistory();
+            }
+        }
+
+        for (const input of document.querySelectorAll("#origin, #destination")) {
+            input.addEventListener("input", () => {
+                input.value = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+            });
+        }
+
+        document.querySelector("#sign-out").addEventListener("click", async () => {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                setStatus(searchStatus, `Não foi possível sair da conta: ${error.message}`);
+                return;
+            }
+            window.location.replace("login.html");
+        });
+
+        searchForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            if (!supabase || !currentUser) {
+                setStatus(searchStatus, "Entre na sua conta para pesquisar voos.");
+                return;
+            }
+
+            searchButton.disabled = true;
+            searchStatus.hidden = true;
+            resultsElement.replaceChildren();
+            resultsHeading.hidden = true;
+
+            const body = {
+                origin: document.querySelector("#origin").value.trim(),
+                destination: document.querySelector("#destination").value.trim(),
+                departureDate: dateInput.value,
+                passengers: Number(document.querySelector("#passengers").value),
+            };
+
+            try {
+                const { data, error } = await supabase.functions.invoke("search-flights", { body });
+                if (error) {
+                    throw new Error(error.message);
+                }
+                if (data?.error) {
+                    throw new Error(data.error);
+                }
+                renderOffers(data?.data ?? []);
+            } catch (error) {
+                setStatus(searchStatus, `Não foi possível buscar voos: ${error.message}`);
+            } finally {
+                searchButton.disabled = false;
+            }
+        });
+
+        document.querySelector("#cancel-checkout").addEventListener("click", () => dialog.close());
+
+        checkoutForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            if (!supabase || !currentUser || !selectedOffer) {
+                setStatus(checkoutStatus, "Não foi possível iniciar a simulação.");
+                return;
+            }
+
+            confirmCheckout.disabled = true;
+            checkoutStatus.hidden = true;
+            const firstSlice = selectedOffer.slices?.[0];
+            const paymentMethod = checkoutForm.elements.namedItem("payment-method").value;
+            const booking = {
+                user_id: currentUser.id,
+                offer_id: selectedOffer.id,
+                origin_code: firstSlice?.origin?.iata_code,
+                destination_code: firstSlice?.destination?.iata_code,
+                departure_date: firstSlice?.segments?.[0]?.departing_at?.slice(0, 10) ?? dateInput.value,
+                price: Number(selectedOffer.total_amount),
+                currency: selectedOffer.total_currency,
+                payment_method: paymentMethod,
+            };
+
+            try {
+                const { error } = await supabase.from("reservas_demo").insert(booking);
+                if (error) {
+                    throw new Error(error.message);
+                }
+                dialog.close();
+                await loadHistory();
+                setStatus(searchStatus, "Simulação salva na sua conta. Nenhuma cobrança ou reserva de passagem foi realizada.", false);
+                searchStatus.scrollIntoView({ behavior: "smooth", block: "center" });
+            } catch (error) {
+                setStatus(checkoutStatus, `Não foi possível salvar a simulação: ${error.message}`);
+            } finally {
+                confirmCheckout.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
