@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encontre seu próximo destino com o Aero-Planes. Pesquise voos e consulte tarifas atualizadas.">
+    <title>Aero-Planes | Seu próximo destino começa aqui</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --navy: #10233f;
+            --blue: #1769e0;
+            --blue-dark: #1056bd;
+            --sky: #eaf3ff;
+            --ink: #17243a;
+            --muted: #64748b;
+            --line: #dce5f0;
+            --white: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: #f7f9fc;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .topbar {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 22px 28px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--navy);
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border-radius: 12px;
+            color: var(--white);
+            background: var(--blue);
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #43536b;
+            font-size: 0.94rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+
+        .nav-links .login-link {
+            padding: 11px 18px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--navy);
+            background: var(--white);
+        }
+
+        .hero {
+            overflow: hidden;
+            position: relative;
+            padding: 72px 28px 90px;
+            color: var(--white);
+            background:
+                radial-gradient(ellipse at 82% 22%, rgba(80, 155, 255, 0.4), transparent 34%),
+                linear-gradient(118deg, #10233f 5%, #123d72 60%, #1769e0 115%);
+        }
+
+        .hero::after {
+            position: absolute;
+            right: -100px;
+            bottom: -240px;
+            width: 600px;
+            height: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            content: "";
+            box-shadow: 0 0 0 55px rgba(255, 255, 255, 0.035), 0 0 0 110px rgba(255, 255, 255, 0.025);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1104px;
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 20px;
+            color: #c9e0ff;
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #71efa9;
+            content: "";
+        }
+
+        h1 {
+            max-width: 680px;
+            margin: 0;
+            font-size: clamp(2.6rem, 6vw, 4.7rem);
+            letter-spacing: -0.065em;
+            line-height: 1.03;
+        }
+
+        .hero-copy {
+            max-width: 550px;
+            margin: 20px 0 0;
+            color: #d5e5fb;
+            font-size: 1.08rem;
+            line-height: 1.7;
+        }
+
+        .search-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 0.7fr auto;
+            align-items: end;
+            gap: 14px;
+            margin-top: 42px;
+            padding: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 18px;
+            color: var(--ink);
+            background: var(--white);
+            box-shadow: 0 18px 50px rgba(4, 20, 44, 0.24);
+        }
+
+        .field label {
+            display: block;
+            margin: 0 0 8px;
+            color: #526179;
+            font-size: 0.77rem;
+            font-weight: 750;
+        }
+
+        .field input {
+            width: 100%;
+            min-width: 0;
+            height: 46px;
+            padding: 0 12px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            outline: none;
+            color: var(--ink);
+            background: #fbfcfe;
+            font: inherit;
+            font-size: 0.92rem;
+        }
+
+        .field input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.14);
+        }
+
+        .search-button,
+        .primary-link {
+            display: inline-flex;
+            min-height: 46px;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 18px;
+            border: 0;
+            border-radius: 9px;
+            color: var(--white);
+            background: var(--blue);
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.93rem;
+            font-weight: 750;
+            text-decoration: none;
+            transition: background 150ms ease, transform 150ms ease;
+        }
+
+        .search-button:hover,
+        .primary-link:hover {
+            transform: translateY(-1px);
+            background: var(--blue-dark);
+        }
+
+        .search-note {
+            margin: 14px 0 0;
+            color: #d5e5fb;
+            font-size: 0.82rem;
+        }
+
+        .content {
+            max-width: 1104px;
+            margin: 0 auto;
+            padding: 72px 28px 84px;
+        }
+
+        .section-heading {
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(1.8rem, 3vw, 2.45rem);
+            letter-spacing: -0.045em;
+        }
+
+        .section-heading p {
+            margin: 12px 0 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature {
+            padding: 24px;
+            border: 1px solid #e6ebf2;
+            border-radius: 14px;
+            background: var(--white);
+        }
+
+        .feature-icon {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border-radius: 12px;
+            color: var(--blue);
+            background: var(--sky);
+            font-size: 1.2rem;
+        }
+
+        .feature h3 {
+            margin: 17px 0 8px;
+            color: var(--navy);
+            font-size: 1.05rem;
+        }
+
+        .feature p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .about {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 58px;
+            padding: 30px;
+            border-radius: 16px;
+            background: var(--sky);
+        }
+
+        .about h2 {
+            margin: 0 0 8px;
+            color: var(--navy);
+            font-size: 1.45rem;
+            letter-spacing: -0.03em;
+        }
+
+        .about p {
+            max-width: 620px;
+            margin: 0;
+            color: #536780;
+            line-height: 1.6;
+        }
+
+        footer {
+            padding: 24px 28px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            background: var(--white);
+            font-size: 0.86rem;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .search-card {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-button {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .topbar {
+                align-items: flex-start;
+                padding: 17px 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 12px 16px;
+            }
+
+            .nav-links a {
+                font-size: 0.84rem;
+            }
+
+            .nav-links .login-link {
+                padding: 8px 11px;
+            }
+
+            .hero {
+                padding: 56px 20px 66px;
+            }
+
+            .hero-copy {
+                font-size: 1rem;
+            }
+
+            .search-card {
+                grid-template-columns: 1fr;
+                gap: 13px;
+                margin-top: 30px;
+                padding: 17px;
+            }
+
+            .search-button {
+                grid-column: auto;
+            }
+
+            .content {
+                padding: 55px 20px 64px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="pagina-inicial.html" aria-label="Aero-Planes, página inicial">
+            <span class="brand-mark" aria-hidden="true">✈</span>
+            <span>Aero-Planes</span>
+        </a>
+        <nav class="nav-links" aria-label="Navegação principal">
+            <a href="pagina-inicial.html">Início</a>
+            <a href="#buscar-voos">Buscar voos</a>
+            <a href="#sobre">Sobre</a>
+            <a class="login-link" href="login.html">Entrar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-inner">
+                <p class="eyebrow">O mundo está mais perto</p>
+                <h1 id="hero-title">Seu próximo destino começa aqui.</h1>
+                <p class="hero-copy">Encontre um voo, compare opções e comece a planejar uma viagem que combina com você.</p>
+
+                <form class="search-card" id="buscar-voos" action="https://www.google.com/travel/flights" method="get" target="_blank" rel="noopener noreferrer">
+                    <div class="field">
+                        <label for="origem">De onde?</label>
+                        <input id="origem" name="origem" type="text" placeholder="Cidade ou aeroporto" autocomplete="off" required>
+                    </div>
+                    <div class="field">
+                        <label for="destino">Para onde?</label>
+                        <input id="destino" name="destino" type="text" placeholder="Cidade ou aeroporto" autocomplete="off" required>
+                    </div>
+                    <div class="field">
+                        <label for="data">Data de ida</label>
+                        <input id="data" name="data" type="date" required>
+                    </div>
+                    <div class="field">
+                        <label for="passageiros">Passageiros</label>
+                        <input id="passageiros" name="passageiros" type="number" min="1" max="9" value="1" required>
+                    </div>
+                    <button class="search-button" type="submit">⌕ <span>Buscar voos</span></button>
+                </form>
+                <p class="search-note">A busca abre no Google Flights para você consultar tarifas e disponibilidade atualizadas.</p>
+            </div>
+        </section>
+
+        <section class="content" aria-labelledby="benefits-title">
+            <div class="section-heading">
+                <h2 id="benefits-title">Planeje sua viagem com tranquilidade</h2>
+                <p>Encontre as informações essenciais para dar o próximo passo e escolha a viagem que faz sentido para você.</p>
+            </div>
+            <div class="feature-grid">
+                <article class="feature">
+                    <span class="feature-icon" aria-hidden="true">⌕</span>
+                    <h3>Pesquise seu próximo voo</h3>
+                    <p>Informe origem, destino e data para consultar opções disponíveis no Google Flights.</p>
+                </article>
+                <article class="feature">
+                    <span class="feature-icon" aria-hidden="true">↗</span>
+                    <h3>Consulte tarifas atualizadas</h3>
+                    <p>Veja preços e disponibilidade diretamente no buscador, sem exibir valores desatualizados aqui.</p>
+                </article>
+                <article class="feature">
+                    <span class="feature-icon" aria-hidden="true">◎</span>
+                    <h3>Acesse sua conta</h3>
+                    <p>Use o botão Entrar para abrir a tela de login do Aero-Planes.</p>
+                </article>
+            </div>
+
+            <section class="about" id="sobre" aria-labelledby="about-title">
+                <div>
+                    <h2 id="about-title">Aero-Planes: sua viagem começa com uma busca</h2>
+                    <p>Estamos aqui para ajudar você a encontrar caminhos para o seu próximo destino. Pesquise voos e confira os detalhes atualizados no serviço de busca.</p>
+                </div>
+                <a class="primary-link" href="#buscar-voos">Encontrar um voo <span aria-hidden="true">→</span></a>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <span>© <span id="ano"></span> Aero-Planes. Boa viagem!</span>
+    </footer>
+
+    <script>
+        const searchForm = document.querySelector("#buscar-voos");
+
+        searchForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const origin = document.querySelector("#origem").value.trim();
+            const destination = document.querySelector("#destino").value.trim();
+            const date = document.querySelector("#data").value;
+            const passengers = document.querySelector("#passageiros").value;
+            const query = `Voos de ${origin} para ${destination} em ${date} para ${passengers} passageiro(s)`;
+            const url = new URL("https://www.google.com/travel/flights");
+
+            url.searchParams.set("q", query);
+            url.searchParams.set("curr", "BRL");
+            url.searchParams.set("hl", "pt-BR");
+            window.open(url.toString(), "_blank", "noopener,noreferrer");
+        });
+
+        const today = new Date();
+        document.querySelector("#data").min = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+        ].join("-");
+        document.querySelector("#ano").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
